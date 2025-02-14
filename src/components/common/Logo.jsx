@@ -1,5 +1,5 @@
 import { Link } from "react-router"
-import LogoSvg from "../ui/Logosvg"
+import LogoSvg from "../ui/LogoSvg"
 
 function Logo() {
   return (
