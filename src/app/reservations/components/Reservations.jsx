@@ -1,0 +1,51 @@
+import { useEffect, useState } from "react"
+import { api } from "../../../services/api"
+import ReservationsList from "./ReservationsList"
+import Reviews from "./Reviews"
+import Modal from "../../../components/ui/Modal"
+
+
+function Reservations() {
+  const [reservations, setReservations] =useState([])
+  const [openModal, setOpenModal] =useState(false)
+  const [hotelId, setHotelId] = useState(null)
+
+
+  useEffect(() => {
+    api.get('/bookings')
+    .then(res => {
+      console.log(res.data)
+      setReservations(res.data)
+    })
+  }, [])
+
+  const handleReservationDelete = (id) => {
+    api.delete(`/bookings/${id}`)
+    .then(() => {
+      setReservations(reservations.filter(r => r.id !== id))
+    })
+  }
+
+  const handleReviewCreate =(id) => {
+    console.log(id)
+    setOpenModal(true)
+    setHotelId(id)
+  }
+
+  return (
+    <div className="max-w-5x1 max-[1024]:px4 mx-auto">
+<ReservationsList 
+reservations={reservations}
+onDelete={handleReservationDelete}
+onCreateReview={handleReviewCreate}
+/>
+
+<Modal openModal={openModal} setOpenModal={setOpenModal}>
+<Reviews hotelId={hotelId}/>
+</Modal>
+    
+    </div>
+  )
+}
+
+export default Reservations
